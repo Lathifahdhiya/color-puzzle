@@ -1,0 +1,76 @@
+<body>
+    <table>
+        <tr id="colors">
+            <td>
+                <div id="1" style="width: 50px; height: 50px; background-color: rgb(94, 79, 162);" draggable="true"></div>
+            </td>
+            <td>
+                <div id="2" style="width: 50px; height: 50px; background-color: rgb(132, 96, 144);"></div>
+            </td>
+            <td>
+                <div id="3" style="width: 50px; height: 50px; background-color: rgb(171, 114, 126);"></div>
+            </td>
+            <td>
+                <div id="4" style="width: 50px; height: 50px; background-color: rgb(209, 131, 107);"></div>
+            </td>
+            <td>
+                <div id="5" style="width: 50px; height: 50px; background-color: rgb(247, 148, 89);"></div>
+            </td>
+        </tr>
+    </table>
+    <input type="text" id="color1-hex" placeholder="color1-hex">
+    <input type="text" id="color2-hex" placeholder="color2-hex">
+    <input type="text" id="jumlah" placeholder="jumlah">
+    <button onclick="generateColorGradient()">Generate</button>
+</body>
+
+<script>
+    function hexToRgb(hex) {
+        const red = parseInt(hex.substr(1, 2), 16);
+        const green = parseInt(hex.substr(3, 2), 16);
+        const blue = parseInt(hex.substr(5, 2), 16);
+        return [red, green, blue];
+    }
+
+    function rgbToHex(rgb) {
+        
+    }
+
+    // Returns a single rgb color interpolation between given rgb color
+    // based on the factor given; via https://codepen.io/njmcode/pen/axoyD?editors=0010
+    function interpolateColor(color1, color2, factor) {
+        var result = color1.slice();
+        for (var i = 0; i < 3; i++) {
+            result[i] = Math.round(result[i] + factor * (color2[i] - color1[i]));
+        }
+        return result;
+    };
+    // My function to interpolate between two colors completely, returning an array
+    function interpolateColors(color1, color2, steps) {
+        var stepFactor = 1 / (steps - 1);
+        var interpolatedColorArray = [];
+
+        for(var i = 0; i < steps; i++) {
+            interpolatedColorArray.push(interpolateColor(color1, color2, stepFactor * i));
+        }
+
+        return interpolatedColorArray;
+    }
+
+    function generateGradientTable(gradient) {
+        let table = "";
+        for (const color of gradient) {
+            table += `<td><div style="width: 50px; height: 50px; background-color: rgb(${color[0]}, ${color[1]}, ${color[2]});"></div></td>`
+        }
+        return table;
+    }
+
+    function generateColorGradient() {
+        const color1 = hexToRgb(document.getElementById("color1-hex").value);
+        const color2 = hexToRgb(document.getElementById("color2-hex").value);
+        const step = parseInt(document.getElementById("jumlah").value);
+        const gradient = interpolateColors(color1, color2, step);
+        const table = generateGradientTable(gradient);
+        document.getElementById("colors").innerHTML = table;
+    }
+</script>
