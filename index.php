@@ -1,2 +1,2 @@
-<h1>Hello!</h1>
+<div></div>
 <?php include_once("color_puzzle.html"); ?>
